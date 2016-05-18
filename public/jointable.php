@@ -4,14 +4,17 @@ LOOP THROUGH THE RESULTS -->
 <?php include("../includes/database.php");
   include("../includes/config.php");
   $db = new Database();
-
   $query = "SELECT * FROM subjects WHERE visible = 1 ORDER BY position ASC";
-  $subjects = $db->select($query);
+  $subject_name = $db->select($query);
+  echo "<pre>".print_r($subject_name, true)."</pre>";
+  $query = "SELECT * FROM subjects INNER JOIN pages ON subjects.id = pages.subject_id";
+  $results = $db->select($query);
+  $group = [];
+  foreach ($results as $key) {
+    $group[] = $key['menu_name'];
+  }
+  echo "<pre>".print_r($results, true)."</pre>";
 
-
-
-  $query = "SELECT * FROM pages WHERE visible = 1 ORDER BY subject_id ASC";
-  $pages = $db->select($query);
 
 ?>
 <?php include("../includes/layouts/header.php"); ?>
