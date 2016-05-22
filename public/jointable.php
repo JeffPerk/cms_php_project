@@ -4,16 +4,22 @@ LOOP THROUGH THE RESULTS -->
 <?php include("../includes/database.php");
   include("../includes/config.php");
   $db = new Database();
-  $query = "SELECT * FROM subjects WHERE visible = 1 ORDER BY position ASC";
-  $subject_name = $db->select($query);
-  echo "<pre>".print_r($subject_name, true)."</pre>";
-  $query = "SELECT * FROM subjects INNER JOIN pages ON subjects.id = pages.subject_id";
+  //$query = "SELECT * FROM subjects WHERE visible = 1 ORDER BY position ASC";
+  //$subject_name = $db->select($query);
+  // echo "<pre>".print_r($subject_name, true)."</pre>";
+  $query = "SELECT * FROM subjects LEFT JOIN pages ON subjects.subjects_id = pages.subjects_id";
   $results = $db->select($query);
-  $group = [];
-  foreach ($results as $key) {
-    $group[] = $key['menu_name'];
-  }
   echo "<pre>".print_r($results, true)."</pre>";
+  // foreach($results as $item) {
+  //
+  //   "<li>".
+    // $subject = 0;
+  //   if($item['subjects_id'] === $subject) {
+  //     $subject = $item['subjects_id'];
+  //     echo $item['subject_menu_name'];
+  //   }
+  // }
+
 
 
 ?>
@@ -21,14 +27,16 @@ LOOP THROUGH THE RESULTS -->
     <div id="main">
       <div id="navigation">
         <ul class="subjects">
-          <?php foreach($subjects as $item) : ?>
-            <li><?php echo $item['menu_name']." (".$item['id'].")"; ?>
+          <?php foreach($results as $item) : ?>
+            <li><?php echo $item['subject_menu_name']; ?>
               <ul class="pages">
-                <?php foreach($pages as $page) : ?>
-                  <?php if($page['subject_id'] === $item['id']) : ?>
-                    <li><?php echo $page['menu_name'] ?></li>
-                  <?php endif; ?>
-                <?php endforeach; ?>
+                <li><?php
+                  $subject = 0;
+                  if ($item['subjects_id'] !== $subject) {
+                    $subject = $item['subjects_id'];
+                    echo $item['pages_menu_name'];
+                  }
+                ?></li>
               </ul>
             </li>
           <?php endforeach; ?>
