@@ -28,7 +28,7 @@
   function get_all_results()
   {
       global $db;
-      $query = 'SELECT s.id, s.subject_menu_name, p.pages_menu_name, p.subjects_id
+      $query = 'SELECT *
                 FROM subjects s
                 LEFT JOIN pages p ON s.id = p.subjects_id';
       $results = $db->select($query);

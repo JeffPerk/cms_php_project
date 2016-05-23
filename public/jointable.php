@@ -7,33 +7,26 @@ LOOP THROUGH THE RESULTS -->
 ?>
  <?php
   $results = get_all_results();
-  $subjects = get_subjects($results);
+  // $subjects = get_subjects($results);
   echo '<pre>'.print_r($results, true).'</pre>';
-  $pages = get_pages($results);
+  // $pages = get_pages($results);
   ?>
 <?php include '../includes/layouts/header.php'; ?>
     <div id="main">
       <div id="navigation">
-        <ul class="subjects">
-          <?php foreach ($subjects as $id => $subject) : ?>
-
-            <a href="jointable.php?subject="<?); ?>><li>
-
-              <?php
-              echo $subject;
-              ?></li></a>
-              <ul class="pages">
-                <?php if (array_key_exists($id, $pages)) :?>
-                  <?php foreach ($pages[$id] as $page): ?>
-                    <a href="jointable.php?page="<?php echo urlencode($page);?>><li><?php
-                    echo $page;
-                  ?></li></a>
-                <?php endforeach; ?>
-              <?php endif; ?>
-              </ul>
-            </li>
-          <?php
-         endforeach; ?>
+        <ul class="subjects"> <?php
+          $current_subject_id = 0;
+          foreach ($results as $result) :
+            if($result['id'] != $current_subject_id) :
+              $current_subject_id = $result['id'];
+              // echo "<li>".$result['subject_menu_name']."</li>";
+         ?>
+          <li><?php echo $result['subject_menu_name']; ?></li>
+        <?php endif; ?>
+         <ul>
+           <?php echo "<li><a href='?id=".$result['pages_id']."'>".$result['pages_menu_name']."</a></li>"; ?>
+         </ul>
+       <?php endforeach; ?>
         </ul>
       </div>
       <div id="page">
