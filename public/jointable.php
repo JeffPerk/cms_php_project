@@ -4,42 +4,52 @@ LOOP THROUGH THE RESULTS -->
 <?php include("../includes/database.php");
   include("../includes/config.php");
   $db = new Database();
-  //$query = "SELECT * FROM subjects WHERE visible = 1 ORDER BY position ASC";
-  //$subject_name = $db->select($query);
-  // echo "<pre>".print_r($subject_name, true)."</pre>";
-  $query = "SELECT * FROM subjects LEFT JOIN pages ON subjects.subjects_id = pages.subjects_id";
+  $query = "SELECT s.id, s.subject_menu_name, p.pages_menu_name, p.subjects_id FROM subjects s LEFT JOIN pages p ON s.id = p.subjects_id";
   $results = $db->select($query);
   echo "<pre>".print_r($results, true)."</pre>";
-  // foreach($results as $item) {
-  //
-  //   "<li>".
-    // $subject = 0;
-  //   if($item['subjects_id'] === $subject) {
-  //     $subject = $item['subjects_id'];
-  //     echo $item['subject_menu_name'];
-  //   }
-  // }
-
-
-
 ?>
+<?php
+  $subjects = [];
+  foreach($results as $row) {
+    $subjects[$row['subjects_id']] = $row['subject_menu_name'];
+  }
+  $subjects_clean = array_unique($subjects);
+  echo "<pre>".print_r($subjects_clean,true)."</pre>";
+ ?>
+ <?php
+  $pages = [];
+  foreach($results as $row) {
+    if(array_key_exists($row['subjects_id'], $pages)) {
+      $pages[$row['subjects_id']][] = $row['pages_menu_name'];
+    } else {
+      if(!empty($row['pages_menu_name'])) {
+        $pages[$row['subjects_id']] = [$row['pages_menu_name']];
+      } else {
+        $pages[$row['subjects_id']] = [];
+      }
+  }
+  }
+  echo "<pre>".print_r($pages,true)."</pre>";
+  ?>
 <?php include("../includes/layouts/header.php"); ?>
     <div id="main">
       <div id="navigation">
         <ul class="subjects">
-          <?php foreach($results as $item) : ?>
-            <li><?php echo $item['subject_menu_name']; ?>
+          <?php foreach($subjects_clean as $item) : ?>
+            <li><?php
+            echo $item;
+             ?></li>
               <ul class="pages">
+                <?php foreach ($pages as $row): ?>
                 <li><?php
-                  $subject = 0;
-                  if ($item['subjects_id'] !== $subject) {
-                    $subject = $item['subjects_id'];
-                    echo $item['pages_menu_name'];
-                  }
+                    echo $row;
+
                 ?></li>
+              <?php endforeach; ?>
               </ul>
             </li>
-          <?php endforeach; ?>
+          <?php
+         endforeach; ?>
         </ul>
       </div>
       <div id="page">
