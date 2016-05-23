@@ -10,24 +10,21 @@ LOOP THROUGH THE RESULTS -->
 ?>
 <?php
   $subjects = [];
-  foreach($results as $row) {
-    $subjects[$row['subjects_id']] = $row['subject_menu_name'];
+  foreach ($results as $row) {
+    $subjects[$row['id']] = $row['subject_menu_name'];
   }
-  $subjects_clean = array_unique($subjects);
-  echo "<pre>".print_r($subjects_clean,true)."</pre>";
+  echo "<pre>".print_r($subjects,true)."</pre>";
  ?>
  <?php
   $pages = [];
   foreach($results as $row) {
-    if(array_key_exists($row['subjects_id'], $pages)) {
-      $pages[$row['subjects_id']][] = $row['pages_menu_name'];
-    } else {
+    if(array_key_exists($row['subjects_id'], $results)) {
       if(!empty($row['pages_menu_name'])) {
-        $pages[$row['subjects_id']] = [$row['pages_menu_name']];
-      } else {
-        $pages[$row['subjects_id']] = [];
+        $pages[$row['subjects_id']][] = $row['pages_menu_name'];
       }
-  }
+    } else {
+      $pages[$row['subjects_id']] = [];
+    }
   }
   echo "<pre>".print_r($pages,true)."</pre>";
   ?>
@@ -35,17 +32,18 @@ LOOP THROUGH THE RESULTS -->
     <div id="main">
       <div id="navigation">
         <ul class="subjects">
-          <?php foreach($subjects_clean as $item) : ?>
+          <?php foreach($subjects as $id => $subject) : ?>
             <li><?php
-            echo $item;
+            echo $subject;
              ?></li>
               <ul class="pages">
-                <?php foreach ($pages as $row): ?>
+            <?php if(array_key_exists($id, $pages)) :?>
+              <?php foreach ($pages[$id] as $page): ?>
                 <li><?php
-                    echo $row;
-
+                  echo $page;
                 ?></li>
               <?php endforeach; ?>
+            <?php endif; ?>
               </ul>
             </li>
           <?php
