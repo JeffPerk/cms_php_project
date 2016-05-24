@@ -60,3 +60,31 @@
       $output .= "</ul>";
       return $output;
   }
+
+  function find_subject_by_id($subject_id) {
+    global $db;
+    $query = "SELECT * FROM subjects WHERE id = $subject_id LIMIT 1";
+    $results = $db->select($query);
+    if($results) {
+      return $results;
+    } else {
+      return null;
+    }
+  }
+
+  function find_page_by_id($page_id) {
+    global $db;
+    $query = "SELECT * FROM pages WHERE pages_id = $page_id LIMIT 1";
+    $results = $db->select($query);
+    if($results) {
+      return $results;
+    } else {
+      return null;
+    }
+  }
+
+  function flatten_array($array) {
+    $collection = collect($array);
+    $flattened = $collection->flatten();
+    return $flattened;
+  }
