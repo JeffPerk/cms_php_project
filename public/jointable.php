@@ -21,11 +21,15 @@ LOOP THROUGH THE RESULTS -->
 <?php include '../includes/layouts/header.php'; ?>
     <div id="main">
       <div id="navigation">
+        <?php echo navigation($results, $selected_subject_id, $selected_pages_id); ?>
       </div>
       <div id="page">
         <h2>Manage Content</h2>
-        <?php echo $selected_subject_id; ?><br />
-        <?php echo $selected_pages_id; ?>
+        <?php if($selected_subject_id) : ?>
+          <?php echo $selected_subject_id; ?><br />
+        <?php elseif($selected_pages_id) : ?>
+          <?php echo $selected_pages_id; ?>
+        <?php endif; ?>
       </div>
     </div>
 <?php include '../includes/layouts/footer.php'; ?>
