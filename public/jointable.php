@@ -7,31 +7,25 @@ LOOP THROUGH THE RESULTS -->
 ?>
  <?php
   $results = get_all_results();
-  // $subjects = get_subjects($results);
-  echo '<pre>'.print_r($results, true).'</pre>';
-  // $pages = get_pages($results);
+  if(isset($_GET['subject'])) {
+    $selected_subject_id = $_GET['subject'];
+    $selected_pages_id = null;
+  } elseif(isset($_GET['pages'])) {
+    $selected_pages_id = $_GET['pages'];
+    $selected_subject_id = null;
+  } else {
+    $selected_subject_id = null;
+    $selected_pages_id = null;
+  }
   ?>
 <?php include '../includes/layouts/header.php'; ?>
     <div id="main">
       <div id="navigation">
-        <ul class="subjects"> <?php
-          $current_subject_id = 0;
-          foreach ($results as $result) :
-            if($result['id'] != $current_subject_id) :
-              $current_subject_id = $result['id'];
-              // echo "<li>".$result['subject_menu_name']."</li>";
-         ?>
-          <li><?php echo $result['subject_menu_name']; ?></li>
-        <?php endif; ?>
-         <ul>
-           <?php echo "<li><a href='?id=".$result['pages_id']."'>".$result['pages_menu_name']."</a></li>"; ?>
-         </ul>
-       <?php endforeach; ?>
-        </ul>
       </div>
       <div id="page">
         <h2>Manage Content</h2>
-
+        <?php echo $selected_subject_id; ?><br />
+        <?php echo $selected_pages_id; ?>
       </div>
     </div>
 <?php include '../includes/layouts/footer.php'; ?>
